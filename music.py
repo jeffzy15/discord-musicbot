@@ -142,7 +142,7 @@ class music_cog(commands.Cog):
     async def skip(self, ctx):
         voice_channel = ctx.author.voice
         self.skip.enabled = False
-
+        
         if voice_channel is None:
             await ctx.send(":x: You are **not** in a voice channel!")
 
@@ -157,18 +157,14 @@ class music_cog(commands.Cog):
             elif not self.vc.is_playing():
                 await ctx.send(":x: I am **not** playing any songs!")
 
-        if voice_channel.channel == self.vc.channel and self.vc.is_playing():
+        if voice_channel.channel == self.vc.channel:
             if self.vc.is_playing():
                 self.vc.stop()
                 await ctx.send(":fast_forward: **Skipped** :thumbsup:")
                 await asyncio.sleep(30)
                 self.skip.enabled = True
-
-                #try to play next in the queue if it exists
-                await self.play_music()
-            
             else:
-                await ctx.send(":x: **No music playing!**")
+                await ctx.send(":x: **No music playing**")
 
         else:
             await ctx.send(":x: You are **not** in my voice channel!")
@@ -265,6 +261,7 @@ class music_cog(commands.Cog):
        
         if voice_channel.channel == self.vc.channel and self.vc.is_connected():
                 await self.vc.disconnect()
+                self.vc.channel == None
                 await ctx.send(":white_check_mark: **Sucessfully disconnected**")
 
     @commands.command(name="help")
