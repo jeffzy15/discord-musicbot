@@ -1,6 +1,7 @@
 # discord.py 
 
-### Commands
+Commands
+--------
 
 1. Play music command
 2. Check list of queued songs command
@@ -63,7 +64,8 @@ Please note that on Linux installing voice you must install the following packag
 * libffi-dev (or ``libffi-devel`` on some systems)
 * python-dev (e.g. ``python3.6-dev`` for Python 3.6)
 
-### Error Handling
+Error Handling
+--------------
 
 1. Ensure user is in a voice channel to connect the bot
 2. Check that author of the command is in same voice channel as the bot to use it
