@@ -47,14 +47,14 @@ To install the development version, do the following:
     $ python3 -m pip install -U .[voice]
     
  
-To install the other dependencies
+To install the other dependencies:
  
- Check the [Requirements](https://github.com/jeffzy15/discord.py/blob/master/requirements.txt) document
+    Check the [Requirements](https://github.com/jeffzy15/discord.py/blob/master/requirements.txt) document
  
  
-To install ffmpeg (**very important**)
+To install ffmpeg (**very important**):
  
-Visit [FFMPEG Website](https://www.ffmpeg.org/)
+    Visit the [FFMPEG Website](https://www.ffmpeg.org/)
  
 Optional Packages
 -----------------
