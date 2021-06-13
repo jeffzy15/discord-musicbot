@@ -141,7 +141,6 @@ class music_cog(commands.Cog):
     @commands.command(name="skip")
     async def skip(self, ctx):
         voice_channel = ctx.author.voice
-        self.skip.enabled = False
         
         if voice_channel is None:
             await ctx.send(":x: You are **not** in a voice channel!")
@@ -161,18 +160,11 @@ class music_cog(commands.Cog):
             if self.vc.is_playing():
                 self.vc.stop()
                 await ctx.send(":fast_forward: **Skipped** :thumbsup:")
-                await asyncio.sleep(30)
-                self.skip.enabled = True
             else:
                 await ctx.send(":x: **No music playing**")
 
         else:
             await ctx.send(":x: You are **not** in my voice channel!")
-
-    @skip.error
-    async def skip_error(self, ctx, error):
-        if isinstance(error, commands.DisabledCommand):
-            await ctx.send(":x: Please wait! Default cooldown is **30s**")
     
     @commands.command(name="pause")
     async def pause(self, ctx):
