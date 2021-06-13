@@ -18,7 +18,7 @@ Key Features
 - 100% coverage of the supported Discord API.
 - Optimised in both speed and memory.
 
-Installing
+Installing the discord library
 ----------
 
 **Python 3.5.3 or higher is required**
@@ -46,15 +46,12 @@ To install the development version, do the following:
     $ cd discord.py
     $ python3 -m pip install -U .[voice]
     
+Installing other dependencies
+-----------------------------
+
+Check [requirements.txt](https://github.com/jeffzy15/discord.py/blob/master/requirements.txt) to install other necessary libraries
  
-To install the other dependencies:
- 
-    Check the [Requirements](https://github.com/jeffzy15/discord.py/blob/master/requirements.txt) document
- 
- 
-To install ffmpeg (**very important**):
- 
-    Visit the [FFMPEG Website](https://www.ffmpeg.org/)
+Visit [ffmpeg](https://www.ffmpeg.org/) to install ffmpeg (**very important**)
  
 Optional Packages
 -----------------
