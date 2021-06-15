@@ -19,6 +19,14 @@ Key Features
 - 100% coverage of the supported Discord API.
 - Optimised in both speed and memory.
 
+Contributing
+-------------- 
+
+- Any contribution of sort is appreciated 
+- Please follow [GitHub's Contibution Guidelines](https://docs.github.com/en/github/site-policy/github-community-guidelines)
+- If it is a issue, include **Issue: {your_issue}** in the title
+- If it is a feature request, include **Feature Request: {your_request}** in the title
+
 Installing the discord library
 ----------
 
