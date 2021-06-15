@@ -270,10 +270,14 @@ class music_cog(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         try:
-            if self.vc.is_connected() and len(self.vc.channel.members) == 1:
+            if before.channel == after.channel:
+                if self.vc.is_connected() and len(self.vc.channel.members) == 1:
+                    await asyncio.sleep(1)
+                    await self.vc.disconnect()
+                    self.vc = ""
+                    await member.send(f"**{member.mention} disconnected and I'm lonely now!**", delete_after=60)
+            else:
                 await asyncio.sleep(1)
                 await self.vc.disconnect()
-                self.vc = ""
-                await member.send(f"**{member.mention} disconnected and I'm lonely now!**", delete_after=60)
         except:
             return
