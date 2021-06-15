@@ -2,6 +2,7 @@ import discord
 from discord.channel import VoiceChannel
 from discord.ext import commands
 import asyncio
+from discord.ext import commands, tasks
 
 from youtube_dl import YoutubeDL
 
@@ -74,41 +75,41 @@ class music_cog(commands.Cog):
             #you need to be connected so that the bot knows where to go
             await ctx.send(":x: You are **not** in any voice channel!")
 
-        try:
-            if voice_channel.channel == self.vc.channel:
-                song = self.search_yt(query)
-                if type(song) == type(True):
-                    await ctx.send(":x: **You almost broke me!**")
+        else:
+            try:
+                if not voice_channel.channel == self.vc.channel:
+                    return
+                
                 else:
+                    song = self.search_yt(query)
+                    if type(song) == type(True):
+                        await ctx.send(":x: **You almost broke me!**")
+
+            except:
+                if self.vc == "":
+                    song = self.search_yt(query)
+                    if type(song) == type(True):
+                        await ctx.send(":x: **You almost broke me!**")
+
+            try: 
+                if voice_channel.channel == self.vc.channel:
                     if self.vc.is_playing():
                         await ctx.send(":white_check_mark: Enqueued **{}**! :thumbsup:".format(song['title']))
                     if not self.vc.is_playing():
                         await ctx.send(":white_check_mark: Now playing **{}**! :thumbsup:".format(song['title']))
-
-                    self.music_queue.append([song, ctx.author.voice.channel])
-
-                    if self.is_playing == False:
-                        await self.play_music()
-            else:
-                await ctx.send(":x: You are **not** in my voice channel!")
-
-        except:
-            if self.vc == "":
-                song = self.search_yt(query)
-                if type(song) == type(True):
-                    await ctx.send(":x: **You almost broke me!**")
+                
                 else:
-                    try:
-                        if self.vc.is_playing():
-                            await ctx.send(":white_check_mark: Enqueued **{}**! :thumbsup:".format(song['title']))
-                    except:
-                        await ctx.send(":white_check_mark: Now playing **{}**! :thumbsup:".format(song['title']))
+                    await ctx.send(":x: You are **not** in my voice channel!")
+            
+            except:
+                if self.vc == "":
+                    await ctx.send(":white_check_mark: Now playing **{}**! :thumbsup:".format(song['title']))
 
-                    self.music_queue.append([song, ctx.author.voice.channel])
-
-                    if self.is_playing == False:
-                        await self.play_music()
+            self.music_queue.append([song, ctx.author.voice.channel])
                     
+            if self.is_playing == False:
+                await self.play_music()
+
     @commands.command(name="queue")
     async def q(self, ctx):
        voice_channel = ctx.author.voice
@@ -251,18 +252,44 @@ class music_cog(commands.Cog):
         elif not self.vc.is_connected():
             await ctx.send(":x: I am **not** connected to a voice channel!")
        
-        if voice_channel.channel == self.vc.channel and self.vc.is_connected():
+        if voice_channel.channel == self.vc.channel:
                 await self.vc.disconnect()
-                self.vc.channel == None
+                self.vc = ""
                 await ctx.send(":white_check_mark: **Sucessfully disconnected**")
+
+        else:
+            await ctx.send(":x: You are **not** in my voice channel!")
 
     @commands.command(name="help")
     async def help(message, ctx):
         embedVar = discord.Embed(title="List of commands", description="Helps you use the bot", color=0x808080)
-        embedVar.add_field(name="pi play", value="Plays a selected song from YouTube", inline=False)
-        embedVar.add_field(name="pi queue", value="Displays the current songs in queue", inline=False)
-        embedVar.add_field(name="pi skip", value="Skips the current song being played", inline = False)
-        embedVar.add_field(name="pi pause", value="Pause the song you are listening to now", inline = False)
-        embedVar.add_field(name="pi resume", value="Resume the song you had paused", inline = False)
-        embedVar.add_field(name="pi leave", value="Disconnect the bot from a voice channel", inline = False)
+        embedVar.add_field(name="-play", value="Plays a selected song from YouTube", inline=False)
+        embedVar.add_field(name="-queue", value="Displays the current songs in queue", inline=False)
+        embedVar.add_field(name="-skip", value="Skips the current song being played", inline = False)
+        embedVar.add_field(name="-pause", value="Pause the song you are listening to now", inline = False)
+        embedVar.add_field(name="-resume", value="Resume the song you had paused", inline = False)
+        embedVar.add_field(name="-leave", value="Disconnect the bot from a voice channel", inline = False)
         await ctx.send(embed=embedVar)
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        try:
+            if self.vc.is_connected() and len(self.vc.channel.members) == 1:
+                await asyncio.sleep(30)
+                await self.vc.disconnect()
+                self.vc = ""
+                CHANNEL_ID = 770946338795683871
+                await client.get_channel(CHANNEL_ID).send(f"**{member.mention} disconnected and I'm lonely now!**")
+        except:
+            return
+
+client = commands.Bot(command_prefix='-', activity = discord.Game(name="discord.gg | -help")) # your bot's status and prefix
+client.remove_command('help')
+client.add_cog(music_cog(client))
+
+@client.event
+async def on_ready(): #start-up
+    print("Logged in as {0.user}".format(client))
+
+TOKEN = # your token id
+client.run(TOKEN)
