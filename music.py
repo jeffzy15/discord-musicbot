@@ -278,7 +278,7 @@ class music_cog(commands.Cog):
                 await asyncio.sleep(30)
                 await self.vc.disconnect()
                 self.vc = ""
-                CHANNEL_ID = 770946338795683871
+                CHANNEL_ID = # your channel id
                 await client.get_channel(CHANNEL_ID).send(f"**{member.mention} disconnected and I'm lonely now!**")
         except:
             return
