@@ -283,7 +283,7 @@ class music_cog(commands.Cog):
         except:
             return
 
-client = commands.Bot(command_prefix='-', activity = discord.Game(name="discord.gg | -help"))
+client = commands.Bot(command_prefix='-', activity = discord.Game(name="discord.gg | -help")) # your bot's status and prefix
 client.remove_command('help')
 client.add_cog(music_cog(client))
 
@@ -291,5 +291,5 @@ client.add_cog(music_cog(client))
 async def on_ready(): #start-up
     print("Logged in as {0.user}".format(client))
 
-TOKEN = "ODQ5MTg5NzY4ODA0OTU4MjA4.YLXjmg.a2k7hSie13qbpVk6AbaJmnxgJHU"
+TOKEN = # your token id
 client.run(TOKEN)
