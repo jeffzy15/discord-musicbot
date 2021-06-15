@@ -77,7 +77,7 @@ class music_cog(commands.Cog):
         else:
             try:
                 if not voice_channel.channel == self.vc.channel:
-                    return
+                    await ctx.send(":x: You are **not** in my voice channel!")
                 
                 else:
                     song = self.search_yt(query)
@@ -96,9 +96,6 @@ class music_cog(commands.Cog):
                         await ctx.send(":white_check_mark: Enqueued **{}**! :thumbsup:".format(song['title']))
                     if not self.vc.is_playing():
                         await ctx.send(":white_check_mark: Now playing **{}**! :thumbsup:".format(song['title']))
-                
-                else:
-                    await ctx.send(":x: You are **not** in my voice channel!")
             
             except:
                 if self.vc == "":
@@ -270,14 +267,10 @@ class music_cog(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         try:
-            if before.channel == after.channel:
-                if self.vc.is_connected() and len(self.vc.channel.members) == 1:
-                    await asyncio.sleep(1)
-                    await self.vc.disconnect()
-                    self.vc = ""
-                    await member.send(f"**{member.mention} disconnected and I'm lonely now!**", delete_after=60)
+            if self.vc.is_connected() and len(self.vc.channel.members) == 1:
+                self.vc.pause()
+
             else:
-                await asyncio.sleep(1)
-                await self.vc.disconnect()
+                self.vc.resume()
         except:
             return
