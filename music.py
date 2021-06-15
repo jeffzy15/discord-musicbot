@@ -2,7 +2,6 @@ import discord
 from discord.channel import VoiceChannel
 from discord.ext import commands
 import asyncio
-from discord.ext import commands, tasks
 
 from youtube_dl import YoutubeDL
 
@@ -217,9 +216,6 @@ class music_cog(commands.Cog):
         
         if self.vc == "":
             return 
-
-        elif not self.vc.is_playing():
-            await ctx.send(":x: I am **not** playing any songs!")
        
         if voice_channel.channel == self.vc.channel:
             if not self.vc.is_paused() and self.vc.is_playing():
@@ -275,21 +271,9 @@ class music_cog(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         try:
             if self.vc.is_connected() and len(self.vc.channel.members) == 1:
-                await asyncio.sleep(30)
+                await asyncio.sleep(1)
                 await self.vc.disconnect()
                 self.vc = ""
-                CHANNEL_ID = 770946338795683871
-                await client.get_channel(CHANNEL_ID).send(f"**{member.mention} disconnected and I'm lonely now!**")
+                await member.send(f"**{member.mention} disconnected and I'm lonely now!**", delete_after=60)
         except:
             return
-
-client = commands.Bot(command_prefix='-', activity = discord.Game(name="discord.gg | -help")) # your bot's status and prefix
-client.remove_command('help')
-client.add_cog(music_cog(client))
-
-@client.event
-async def on_ready(): #start-up
-    print("Logged in as {0.user}".format(client))
-
-TOKEN = # your token id
-client.run(TOKEN)
