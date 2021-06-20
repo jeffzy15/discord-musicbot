@@ -79,10 +79,13 @@ class music_cog(commands.Cog):
                 if not voice_channel.channel == self.vc.channel:
                     await ctx.send(":x: You are **not** in my voice channel!")
                 
-                else:
-                    song = self.search_yt(query)
-                    if type(song) == type(True):
-                        await ctx.send(":x: **You almost broke me!**")
+                elif voice_channel.channel == self.vc.channel:
+                    if len(self.music_queue) < 10:
+                        song = self.search_yt(query)
+                        if type(song) == type(True):
+                            await ctx.send(":x: **You almost broke me!**")
+                    else:
+                        await ctx.send(":x: You **cannot** enqueue more than **10 songs**")
 
             except:
                 if self.vc == "":
